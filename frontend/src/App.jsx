@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TripProvider, useTrip } from './context/TripContext';
-import HotelCard from './components/HotelCard';
-import CostSummary from './components/CostSummary';
+import HotelCard from './components/hotels/HotelCard';
+import CostSummary from './components/trip/CostSummary';
 
 function PlannerContent() {
   const {
@@ -83,9 +83,13 @@ function PlannerContent() {
               {loadingHotels && <span className="text-xs text-slate-400">Loading hotels...</span>}
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {hotels.map((h) => (
-                <HotelCard key={h._id} hotel={h} />
-              ))}
+              {hotels && hotels.length > 0 ? (
+                hotels.map((h) => (
+                  <HotelCard key={h._id} hotel={h} />
+                ))
+              ) : (
+                <p className="text-sm text-slate-500 col-span-2">No hotels found. Connect MongoDB or wait for seeding.</p>
+              )}
             </div>
           </section>
 
