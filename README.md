@@ -55,7 +55,7 @@ trip-planner/
 
 * [Node.js](https://nodejs.org/) (v18 or newer)
 * [Git](https://git-scm.com/)
-* Optional: MongoDB connection URI or local MongoDB instance
+
 
 #
 
