@@ -25,9 +25,9 @@ function AuthModal({ isOpen, onClose }) {
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative">
-        <button onClick={onClose} className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 font-bold">✕</button>
+        <button onClick={onClose} className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 font-bold text-lg">✕</button>
         <h2 className="text-2xl font-black text-slate-900 mb-2">{isLogin ? 'Welcome Back' : 'Create Account'}</h2>
-        <p className="text-sm text-slate-500 mb-6">Access your customized itinerary & discounts.</p>
+        <p className="text-sm text-slate-500 mb-6">Manage your trip itineraries & saved bookings.</p>
         
         <form onSubmit={handleSubmit} className="space-y-4">
           {!isLogin && (
@@ -44,7 +44,7 @@ function AuthModal({ isOpen, onClose }) {
             <label className="block text-xs font-semibold text-slate-600 mb-1">Password</label>
             <input type="password" required value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" className="w-full px-4 py-2.5 border rounded-xl text-sm border-slate-300 focus:ring-2 focus:ring-indigo-500" />
           </div>
-          <button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl text-sm transition">
+          <button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl text-sm transition shadow-sm">
             {isLogin ? 'Sign In' : 'Register Account'}
           </button>
         </form>
@@ -60,27 +60,62 @@ function AuthModal({ isOpen, onClose }) {
   );
 }
 
-function ReceiptModal() {
+// Fullscreen Booking Success Modal
+function TravelPlannedModal() {
   const { bookingReceipt, setBookingReceipt } = useTrip();
   if (!bookingReceipt) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-white rounded-3xl max-w-lg w-full p-8 shadow-2xl relative text-slate-900 border border-emerald-100">
-        <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-2xl font-black mb-4">✓</div>
-        <h2 className="text-2xl font-black text-slate-900">Trip Confirmed!</h2>
-        <p className="text-slate-500 text-sm">Booking ID: <span className="font-mono font-bold text-slate-800">{bookingReceipt.bookingId}</span></p>
-
-        <div className="my-6 bg-slate-50 p-4 rounded-2xl border border-slate-200 text-sm space-y-2">
-          <div className="flex justify-between"><span className="text-slate-500">Guest:</span><span className="font-bold">{bookingReceipt.guestName}</span></div>
-          <div className="flex justify-between"><span className="text-slate-500">Destination:</span><span className="font-bold">{bookingReceipt.destination}</span></div>
-          <div className="flex justify-between"><span className="text-slate-500">Stay Duration:</span><span className="font-bold">{bookingReceipt.totalNights} Night(s)</span></div>
-          <div className="flex justify-between"><span className="text-slate-500">Hotel:</span><span className="font-bold">{bookingReceipt.hotelName}</span></div>
-          <div className="flex justify-between border-t border-slate-200 pt-2"><span className="font-bold">Total Paid:</span><span className="font-black text-emerald-600 text-lg">${bookingReceipt.totalCost}</span></div>
+    <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+      <div className="bg-white rounded-3xl max-w-lg w-full p-8 shadow-2xl relative text-slate-900 border border-slate-100 text-center animate-in fade-in zoom-in duration-200">
+        
+        {/* Success Icon */}
+        <div className="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-4xl mx-auto mb-4 ring-8 ring-emerald-50">
+          ✈️
         </div>
 
-        <button onClick={() => setBookingReceipt(null)} className="w-full bg-slate-900 text-white font-bold py-3 rounded-xl text-sm hover:bg-slate-800 transition">
-          Close & Plan Another
+        <h2 className="text-3xl font-black text-slate-900 tracking-tight">
+          Your Travel Has Been Planned!
+        </h2>
+        <p className="text-slate-500 text-sm mt-1">
+          Pack your bags! All reservations & itinerary costs have been compiled.
+        </p>
+
+        {/* Confirmation Details Card */}
+        <div className="my-6 bg-slate-50 p-5 rounded-2xl border border-slate-200 text-sm text-left space-y-3">
+          <div className="flex justify-between items-center pb-2 border-b border-slate-200">
+            <span className="text-slate-500 text-xs font-semibold uppercase">Booking Ref</span>
+            <span className="font-mono font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">
+              {bookingReceipt.bookingId}
+            </span>
+          </div>
+
+          <div className="flex justify-between">
+            <span className="text-slate-500">Destination:</span>
+            <span className="font-bold text-slate-800">{bookingReceipt.destination}</span>
+          </div>
+
+          <div className="flex justify-between">
+            <span className="text-slate-500">Duration:</span>
+            <span className="font-bold text-slate-800">{bookingReceipt.totalNights} Night(s)</span>
+          </div>
+
+          <div className="flex justify-between">
+            <span className="text-slate-500">Stay Selection:</span>
+            <span className="font-bold text-slate-800">{bookingReceipt.hotelName}</span>
+          </div>
+
+          <div className="flex justify-between border-t border-slate-200 pt-3 items-baseline">
+            <span className="font-bold text-slate-700">Total Trip Cost:</span>
+            <span className="font-black text-emerald-600 text-2xl">${bookingReceipt.totalCost}</span>
+          </div>
+        </div>
+
+        <button
+          onClick={() => setBookingReceipt(null)}
+          className="w-full bg-slate-900 hover:bg-slate-800 text-white font-extrabold py-3.5 rounded-2xl text-sm transition shadow-md cursor-pointer"
+        >
+          Done & Plan Another Trip
         </button>
       </div>
     </div>
@@ -116,7 +151,7 @@ function PlannerContent() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-16">
-      {/* Dynamic Header with Sign In / Account Buttons */}
+      {/* Header */}
       <header className="bg-white border-b border-slate-200 py-4 px-6 md:px-12 shadow-sm sticky top-0 z-40">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-2">
@@ -138,14 +173,12 @@ function PlannerContent() {
                 </button>
               </div>
             ) : (
-              <div className="space-x-2">
-                <button
-                  onClick={() => setIsAuthOpen(true)}
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs md:text-sm font-bold px-4 py-2 rounded-xl transition shadow-sm"
-                >
-                  Sign In / Register
-                </button>
-              </div>
+              <button
+                onClick={() => setIsAuthOpen(true)}
+                className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs md:text-sm font-bold px-4 py-2 rounded-xl transition shadow-sm"
+              >
+                Sign In / Register
+              </button>
             )}
           </div>
         </div>
@@ -155,7 +188,7 @@ function PlannerContent() {
       <main className="max-w-7xl mx-auto px-4 md:px-8 mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-8">
           
-          {/* Trip Parameters with Hotel Search trigger */}
+          {/* Trip Parameters */}
           <section className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
             <h2 className="text-lg font-bold text-slate-900 mb-4">1. Trip Parameters & Destination</h2>
             <form onSubmit={handleSearchHotels} className="grid grid-cols-1 sm:grid-cols-4 gap-4">
@@ -169,7 +202,7 @@ function PlannerContent() {
                     placeholder="e.g. Goa, Paris, Tokyo"
                     className="w-full px-3.5 py-2 border rounded-xl border-slate-300 focus:ring-2 focus:ring-indigo-500 text-sm"
                   />
-                  <button type="submit" className="bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs px-3 rounded-xl">
+                  <button type="submit" className="bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs px-3 rounded-xl cursor-pointer">
                     Search
                   </button>
                 </div>
@@ -207,7 +240,7 @@ function PlannerContent() {
                   <HotelCard key={h._id || h.name} hotel={h} />
                 ))
               ) : (
-                <p className="text-sm text-slate-500 col-span-2">No hotels found for "{destination}". Showing suggestions.</p>
+                <p className="text-sm text-slate-500 col-span-2">No hotels found. Showing default options.</p>
               )}
             </div>
           </section>
@@ -232,7 +265,7 @@ function PlannerContent() {
               />
               <button
                 type="submit"
-                className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2 rounded-xl text-sm transition"
+                className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2 rounded-xl text-sm transition cursor-pointer"
               >
                 Add
               </button>
@@ -247,7 +280,7 @@ function PlannerContent() {
                     <button
                       type="button"
                       onClick={() => removeActivity(act.id)}
-                      className="text-rose-500 hover:text-rose-700 font-bold text-xs"
+                      className="text-rose-500 hover:text-rose-700 font-bold text-xs cursor-pointer"
                     >
                       Remove
                     </button>
@@ -260,12 +293,12 @@ function PlannerContent() {
 
         {/* Sticky Cost Summary */}
         <div className="lg:col-span-1">
-          <CostSummary onOpenAuth={() => setIsAuthOpen(true)} />
+          <CostSummary />
         </div>
       </main>
 
       <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
-      <ReceiptModal />
+      <TravelPlannedModal />
     </div>
   );
 }
