@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTrip } from '../context/TripContext';
+import { useTrip } from '../../context/TripContext';
 
 export default function HotelCard({ hotel }) {
   const { selectedHotel, setSelectedHotel } = useTrip();
